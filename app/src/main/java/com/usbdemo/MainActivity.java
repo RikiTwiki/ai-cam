@@ -423,7 +423,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 public void run() {
                     if (m_bPreview) { // Assuming m_bPreview indicates if preview is active
                         temp(m_dwCurUserID);
-                        if (temp(m_dwCurUserID) > 39.4 && !m_bWebViewOpened) {
+                        if (temp(m_dwCurUserID) > 39.2 && !m_bWebViewOpened) {
                             m_bWebViewOpened = true;
                             runOnUiThread(new Runnable() {
                                 @Override
