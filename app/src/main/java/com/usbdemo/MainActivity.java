@@ -16,11 +16,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.speech.tts.TextToSpeech;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.webkit.CookieManager;
+import android.webkit.PermissionRequest;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
@@ -44,6 +48,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback{
 
@@ -401,7 +406,14 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     //开始预览
     private boolean StartPreview() {
 
-
+        // Check for permissions
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.RECORD_AUDIO},
+                    1);  // 1 is your custom request code
+        }
 
         m_objPreview.SetUserID(m_dwCurUserID);//确定预览的设备
 
@@ -418,32 +430,50 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             // Add a Runnable that calls the 'temp' method every second while preview is active
             final Handler handler = new Handler(Looper.getMainLooper());
             WebView myWebView = (WebView) findViewById(R.id.webview);
+            myWebView.setWebViewClient(new WebViewClient());  // This line is very important
+            myWebView.getSettings().setJavaScriptEnabled(true);
+            myWebView.getSettings().setDomStorageEnabled(true);
+            myWebView.getSettings().setUseWideViewPort(true);
+            myWebView.getSettings().setLoadWithOverviewMode(true);
+            myWebView.setWebChromeClient(new WebChromeClient() {
+                @Override
+                public void onPermissionRequest(final PermissionRequest request) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        request.grant(request.getResources());
+                    }
+                }
+            });
+
+            CookieManager.getInstance().setAcceptCookie(true);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                CookieManager.getInstance().setAcceptThirdPartyCookies(myWebView, true);
+            }
             final Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
                     if (m_bPreview) { // Assuming m_bPreview indicates if preview is active
-                        temp(m_dwCurUserID);
-                        if (temp(m_dwCurUserID) > 39.2 && !m_bWebViewOpened) {
+                        double temp = temp(m_dwCurUserID);
+                        if (temp > 38.2 && !m_bWebViewOpened) {
                             m_bWebViewOpened = true;
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    myWebView.setWebViewClient(new WebViewClient());  // This line is very important
-                                    myWebView.setVisibility(View.VISIBLE);
-                                    myWebView.getSettings().setJavaScriptEnabled(true);
-                                    myWebView.loadUrl("http://10.118.50.31:3000/");
-                                }
+                            runOnUiThread(() -> {
+                                // Say "Come to me" in Russian
+                                TextToSpeech tts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+                                    @Override
+                                    public void onInit(int status) {
+                                        if (status != TextToSpeech.ERROR) {
+                                            tts.setLanguage(new Locale("ru"));
+                                            tts.speak("Приходи ко мне", TextToSpeech.QUEUE_FLUSH, null, null);
+                                        }
+                                    }
+                                });
+                                myWebView.setVisibility(View.VISIBLE);
+                                myWebView.loadUrl("https://adminagro.24mycrm.com/chat-bot/");
                             });
-                        } else if (temp(m_dwCurUserID) < 38 && m_bWebViewOpened) {
+                        } else if (temp < 37.0 && m_bWebViewOpened) {
                             m_bWebViewOpened = false;
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    myWebView.reload();
-                                }
-                            });
+                            runOnUiThread(myWebView::reload);
                         }
-                        handler.postDelayed(this, 5000); // Call every 5 seconds
+                        handler.postDelayed(this, 1000); // Call every 5 seconds
                     }
                 }
             };
