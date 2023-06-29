@@ -235,4 +235,14 @@
         android:layout_height="match_parent"
         android:visibility="gone" />
 
+    <ImageView
+        android:id="@+id/myImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/gts"
+        android:contentDescription="@string/image_desc"
+        android:background="@color/white"
+        android:visibility="visible"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
