@@ -14,18 +14,24 @@ import android.hardware.usb.UsbDeviceConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.speech.tts.TextToSpeech;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.webkit.CookieManager;
+import android.webkit.PermissionRequest;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,12 +44,19 @@ import com.hcusbsdk.Interface.USB_USER_LOGIN_INFO;
 import com.hcusbsdk.jna.HCUSBSDK;
 import com.hcusbsdk.jna.HCUSBSDKByJNA;
 
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback{
 
@@ -133,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         //网络权限动态申请     //高版本SDK下AndroidManifest.xml中配置的网络权限不起作用
         CheckNetworkPermission();
         Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show();
+        checkForUpdates();
     }
 
     //初始化界面控件
@@ -401,13 +415,24 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     //开始预览
     private boolean StartPreview() {
 
-
+        // Check for permissions
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.RECORD_AUDIO},
+                    1);  // 1 is your custom request code
+        }
 
         m_objPreview.SetUserID(m_dwCurUserID);//确定预览的设备
 
         DisplayMetrics metric = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metric);
         m_objPreview.SetScreenResolution(metric.widthPixels, metric.heightPixels);
+
+        ImageView myImageView = (ImageView) findViewById(R.id.myImageView);
+        myImageView.setImageResource(R.drawable.gts);  // show the cat picture
+        myImageView.setVisibility(View.VISIBLE);  // make sure the image is visible
 
         if (m_objPreview.StartPreview(m_pHolder)) {
             //预览成功
@@ -418,32 +443,57 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             // Add a Runnable that calls the 'temp' method every second while preview is active
             final Handler handler = new Handler(Looper.getMainLooper());
             WebView myWebView = (WebView) findViewById(R.id.webview);
+            myWebView.setWebViewClient(new WebViewClient());  // This line is very important
+            myWebView.getSettings().setJavaScriptEnabled(true);
+            myWebView.getSettings().setDomStorageEnabled(true);
+            myWebView.getSettings().setUseWideViewPort(true);
+            myWebView.getSettings().setLoadWithOverviewMode(true);
+            myWebView.setWebChromeClient(new WebChromeClient() {
+                @Override
+                public void onPermissionRequest(final PermissionRequest request) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        request.grant(request.getResources());
+                    }
+                }
+            });
+
+            CookieManager.getInstance().setAcceptCookie(true);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                CookieManager.getInstance().setAcceptThirdPartyCookies(myWebView, true);
+            }
             final Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
                     if (m_bPreview) { // Assuming m_bPreview indicates if preview is active
-                        temp(m_dwCurUserID);
-                        if (temp(m_dwCurUserID) > 39.2 && !m_bWebViewOpened) {
+                        double temp = temp(m_dwCurUserID);
+                        if (temp > 38.2 && !m_bWebViewOpened) {
                             m_bWebViewOpened = true;
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    myWebView.setWebViewClient(new WebViewClient());  // This line is very important
-                                    myWebView.setVisibility(View.VISIBLE);
-                                    myWebView.getSettings().setJavaScriptEnabled(true);
-                                    myWebView.loadUrl("http://10.118.50.31:3000/");
-                                }
+                            runOnUiThread(() -> {
+                                // Add a line of code to say "Come to me" in Russian
+                                final TextToSpeech[] tts = new TextToSpeech[1];  // Use an array to allow it to be final and mutable
+                                tts[0] = new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {
+                                    @Override
+                                    public void onInit(int status) {
+                                        if(status != TextToSpeech.ERROR) {
+                                            tts[0].setLanguage(new Locale("ru")); // Set language to Russian
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                                tts[0].speak("Подойдите ко мне", TextToSpeech.QUEUE_FLUSH, null, null); // Say "Come to me" in Russian
+                                            }
+                                        }
+                                    }
+                                });
+                                myWebView.setVisibility(View.VISIBLE);
+                                myImageView.setVisibility(View.GONE); // hide the cat picture
+                                myWebView.loadUrl("https://adminagro.24mycrm.com/chat-bot/");
                             });
-                        } else if (temp(m_dwCurUserID) < 38 && m_bWebViewOpened) {
+                        } else if (temp < 36.2 && m_bWebViewOpened) {
                             m_bWebViewOpened = false;
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    myWebView.reload();
-                                }
+                            runOnUiThread(() -> {
+                                myWebView.reload();
+                                myImageView.setVisibility(View.VISIBLE); // show the cat picture
                             });
                         }
-                        handler.postDelayed(this, 5000); // Call every 5 seconds
+                        handler.postDelayed(this, 4000); // Call every 5 seconds
                     }
                 }
             };
@@ -457,6 +507,12 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             return false;
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        // Do nothing
+    }
+
 
 
     //停止预览
@@ -1187,5 +1243,80 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         Toast.makeText(this, "temp:" + maxTemp, Toast.LENGTH_SHORT).show();
         return maxTemp;
     }
+
+
+    private void checkForUpdates() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // Replace with your server URL
+                    URL url = new URL("http://0.0.0.0:8000/version.json");
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.connect();
+
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    String json = reader.readLine();
+                    reader.close();
+
+                    // Parse JSON data
+                    JSONObject obj = new JSONObject(json);
+                    double versionCode = obj.getInt("versionCode");
+                    String versionName = obj.getString("versionName");
+                    String apkFileUrl = obj.getString("apkFile");
+
+                    // Replace with your current version code
+                    if (versionCode > 1.1) {
+                        // A new version is available
+                        // Now download and install the new version
+                        downloadAndInstallApk(apkFileUrl);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    private void downloadAndInstallApk(String apkFileUrl) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL(apkFileUrl);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.connect();
+
+                    File outputFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "app-v7a-debug.apk");
+                    if (outputFile.exists()) {
+                        outputFile.delete();
+                    }
+
+                    FileOutputStream fos = new FileOutputStream(outputFile);
+                    InputStream is = connection.getInputStream();
+
+                    byte[] buffer = new byte[1024];
+                    int length;
+
+                    while ((length = is.read(buffer)) != -1) {
+                        fos.write(buffer, 0, length);
+                    }
+
+                    fos.flush();
+                    fos.close();
+                    is.close();
+
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setDataAndType(Uri.fromFile(outputFile), "application/vnd.android.package-archive");
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
 
 }
