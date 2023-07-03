@@ -150,6 +150,9 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         CheckNetworkPermission();
         Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show();
         checkForUpdates();
+
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
     }
 
     //初始化界面控件
@@ -467,6 +470,9 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             myWebView.getSettings().setDomStorageEnabled(true);
             myWebView.getSettings().setUseWideViewPort(true);
             myWebView.getSettings().setLoadWithOverviewMode(true);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                myWebView.getSettings().setMediaPlaybackRequiresUserGesture(false); // This line will allow audio autoplay
+            }
             myWebView.setWebChromeClient(new WebChromeClient() {
                 @Override
                 public void onPermissionRequest(final PermissionRequest request) {
