@@ -66,6 +66,9 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     private int m_dwLoginDevIndex = 0; //默认登录第一个设备
     private int m_dwCurUserID = JavaInterface.USB_INVALID_USER_ID; //当前登录的设备句柄
 
+
+    public final String URL = "https://adminagro.24mycrm.com/chat-bot/";
+
     private boolean m_bLogin = false; //是否登录设备
     private boolean m_bPreview = false; //是否开启预览
     private boolean m_bUpgrade = false; //是否在升级设备
@@ -443,7 +446,23 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             // Add a Runnable that calls the 'temp' method every second while preview is active
             final Handler handler = new Handler(Looper.getMainLooper());
             WebView myWebView = (WebView) findViewById(R.id.webview);
-            myWebView.setWebViewClient(new WebViewClient());  // This line is very important
+            myWebView.setWebViewClient(new WebViewClient() {
+
+                @Override
+                public void onPageFinished(WebView view, String url) {
+                    super.onPageFinished(view, url);
+
+                    view.loadUrl(
+                            "javascript:(function() { " +
+                                    "var elements = document.getElementsByClassName('audioRecordAnimation_audio-record-container__1AZvz audioRecordAnimation_initialAnimate__F56JJ');" +
+                                    "for (var i = 0; i < elements.length; i++) {" +
+                                    "elements[i].click();" +
+                                    "elements[i].click();" +
+                                    "}" +
+                                    "})()"
+                    );
+                }
+            });
             myWebView.getSettings().setJavaScriptEnabled(true);
             myWebView.getSettings().setDomStorageEnabled(true);
             myWebView.getSettings().setUseWideViewPort(true);
@@ -484,7 +503,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                                 });
                                 myWebView.setVisibility(View.VISIBLE);
                                 myImageView.setVisibility(View.GONE); // hide the cat picture
-                                myWebView.loadUrl("https://adminagro.24mycrm.com/chat-bot/");
+                                myWebView.loadUrl(URL);
                             });
                         } else if (temp < 36.2 && m_bWebViewOpened) {
                             m_bWebViewOpened = false;
