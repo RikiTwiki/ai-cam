@@ -492,20 +492,8 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                         double temp = temp(m_dwCurUserID);
                         if (temp > 38.2 && !m_bWebViewOpened) {
                             m_bWebViewOpened = true;
+                            myImageView.setVisibility(View.GONE);
                             runOnUiThread(() -> {
-                                // Add a line of code to say "Come to me" in Russian
-                                final TextToSpeech[] tts = new TextToSpeech[1];  // Use an array to allow it to be final and mutable
-                                tts[0] = new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {
-                                    @Override
-                                    public void onInit(int status) {
-                                        if(status != TextToSpeech.ERROR) {
-                                            tts[0].setLanguage(new Locale("ru")); // Set language to Russian
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                                tts[0].speak("Подойдите ко мне", TextToSpeech.QUEUE_FLUSH, null, null); // Say "Come to me" in Russian
-                                            }
-                                        }
-                                    }
-                                });
                                 myWebView.setVisibility(View.VISIBLE);
                                 myImageView.setVisibility(View.GONE); // hide the cat picture
                                 myWebView.loadUrl(URL);
@@ -517,7 +505,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                                 myImageView.setVisibility(View.VISIBLE); // show the cat picture
                             });
                         }
-                        handler.postDelayed(this, 4000); // Call every 5 seconds
+                        handler.postDelayed(this, 5000); // Call every 5 seconds
                     }
                 }
             };
