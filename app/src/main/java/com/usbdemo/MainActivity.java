@@ -457,9 +457,8 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
                     view.loadUrl(
                             "javascript:(function() { " +
-                                    "var elements = document.getElementsByClassName('audioRecordAnimation_audio-record-container__1AZvz audioRecordAnimation_initialAnimate__F56JJ');" +
+                                    "var elements = document.getElementsByClassName('Modal_heading__h+39d');" +
                                     "for (var i = 0; i < elements.length; i++) {" +
-                                    "elements[i].click();" +
                                     "elements[i].click();" +
                                     "}" +
                                     "})()"
