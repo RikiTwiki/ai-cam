@@ -501,7 +501,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                         } else if (temp < 36.2 && m_bWebViewOpened) {
                             m_bWebViewOpened = false;
                             runOnUiThread(() -> {
-                                myWebView.reload();
+//                                myWebView.reload();
                                 myImageView.setVisibility(View.VISIBLE); // show the cat picture
                             });
                         }
