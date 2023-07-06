@@ -438,7 +438,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
         ImageView myImageView = (ImageView) findViewById(R.id.myImageView);
         myImageView.setImageResource(R.drawable.gts);  // show the cat picture
-        myImageView.setVisibility(View.VISIBLE);  // make sure the image is visible
+        myImageView.setVisibility(View.GONE);  // make sure the image is visible
 
         if (m_objPreview.StartPreview(m_pHolder)) {
             //预览成功
@@ -457,7 +457,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
                     view.loadUrl(
                             "javascript:(function() { " +
-                                    "var elements = document.getElementsByClassName('Modal_heading__h+39d');" +
+                                    "var elements = document.getElementsByClassName('MuiTypography-root jss256 jss261 MuiTypography-body1');" +
                                     "for (var i = 0; i < elements.length; i++) {" +
                                     "elements[i].click();" +
                                     "}" +
@@ -502,7 +502,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                             m_bWebViewOpened = false;
                             runOnUiThread(() -> {
 //                                myWebView.reload();
-                                myImageView.setVisibility(View.VISIBLE); // show the cat picture
+                                myImageView.setVisibility(View.GONE); // show the cat picture
                             });
                         }
                         handler.postDelayed(this, 5000); // Call every 5 seconds
