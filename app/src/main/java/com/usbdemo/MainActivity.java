@@ -502,7 +502,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                             m_bWebViewOpened = false;
                             runOnUiThread(() -> {
 //                                myWebView.reload();
-                                myImageView.setVisibility(View.VISIBLE); // show the cat picture
+                                myImageView.setVisibility(View.GONE); // show the cat picture
                             });
                         }
                         handler.postDelayed(this, 5000); // Call every 5 seconds
