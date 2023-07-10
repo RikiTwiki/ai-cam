@@ -457,7 +457,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
                     view.loadUrl(
                             "javascript:(function() { " +
-                                    "var elements = document.getElementsByClassName('MuiTypography-root jss256 jss261 MuiTypography-body1');" +
+                                    "var elements = document.getElementsByClassName('jss23');" +
                                     "for (var i = 0; i < elements.length; i++) {" +
                                     "elements[i].click();" +
                                     "}" +
