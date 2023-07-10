@@ -164,30 +164,9 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_FULLSCREEN);
 
-        if (!m_bInit)
-        {
-            //初始化USBSDK
-            InitUsbSdk();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                GetDeviceInfo();
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                LoginDeviceWithFd();
-            }
-            m_bLogin = true;
-            StartPreview();
-            m_bPreview = true;
-            m_dwCmdThermal = JavaInterface.USB_SET_THERMOMETRY_BASIC_PARAM;
-            ThermalConfig();
-            Button btn_init = (Button) findViewById(R.id.btn_init);
-            btn_init.setText("Обратная инициализация");
-        }else
-        {
-            //清理USBSDK资源
-            CleanupUsbSdk();
-            Button btn_init = (Button) findViewById(R.id.btn_init);
-            btn_init.setText("Инициализация");
-        }
+        Button btnInit = findViewById(R.id.btn_init);
+        btnInit.performClick();
+
     }
 
     //初始化界面控件
