@@ -141,6 +141,10 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         //初始化界面控件
         InitControl();
 
+        // Automatically click the btn_init button
+        Button btnInit = findViewById(R.id.btn_init);
+        btnInit.performClick();
+
         m_objPreview = new PreviewActivity(this);
         m_objUpgrade = new Upgrade(this);
 
