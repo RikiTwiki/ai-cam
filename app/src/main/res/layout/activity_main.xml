@@ -34,183 +34,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
-<!--            <Button-->
-<!--                android:id="@+id/btn_enum"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="5"-->
-<!--                android:text="Перечислительные устройства" />-->
 
-<!--            <Space-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1" />-->
-
-<!--            <Button-->
-<!--                android:id="@+id/btn_login"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="5"-->
-<!--                android:text="Вход в систему" />-->
 
         </LinearLayout>
 
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:layout_weight="1"-->
-<!--            android:orientation="horizontal">-->
 
-<!--            <Spinner-->
-<!--                android:id="@+id/spinner_preview"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="5" />-->
-
-<!--            <Space-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1" />-->
-
-<!--            <Button-->
-<!--                android:id="@+id/btn_startPreview"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="5"-->
-<!--                android:text="Начать предварительный просмотр" />-->
-
-<!--            <Space-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1" />-->
-
-<!--            <Button-->
-<!--                android:id="@+id/btn_upgrade"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="5"-->
-<!--                android:text="Начало модернизации" />-->
-
-<!--            <Space-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1" />-->
-
-<!--            <Button-->
-<!--                android:id="@+id/btn_upgradeState"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="5"-->
-<!--                android:text="Статус обновления" />-->
-
-<!--        </LinearLayout>-->
-
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:layout_weight="1"-->
-<!--            android:orientation="horizontal">-->
-
-<!--            <Button-->
-<!--                android:id="@+id/btn_config_camera"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="5"-->
-<!--                android:text="Внутренняя конфигурация" />-->
-
-<!--            <Space-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1" />-->
-
-<!--            <Button-->
-<!--                android:id="@+id/btn_config_acs"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="5"-->
-<!--                android:text="Конфигурация контроля доступа" />-->
-
-<!--            <Space-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1" />-->
-
-<!--            <Button-->
-<!--                android:id="@+id/btn_config_transfer"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="5"-->
-<!--                android:text="Преображение" />-->
-
-<!--            <Space-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1" />-->
-
-<!--            <Button-->
-<!--                android:id="@+id/btn_config_thermal"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="5"-->
-<!--                android:text="Конфигурации тепловизоров" />-->
-<!--            -->
-<!--            <Space-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1" />-->
-
-<!--        </LinearLayout>-->
-
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:layout_weight="1"-->
-<!--            android:orientation="horizontal">-->
-
-<!--            <Spinner-->
-<!--                android:id="@+id/spinner_camera"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="5" />-->
-
-<!--            <Space-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1" />-->
-
-<!--            <Spinner-->
-<!--                android:id="@+id/spinner_acs"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="5" />-->
-
-<!--            <Space-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1" />-->
-
-<!--            <Spinner-->
-<!--                android:id="@+id/spinner_transfer"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="5" />-->
-
-<!--            <Space-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1" />-->
-
-<!--            <Spinner-->
-<!--                android:id="@+id/spinner_thermal"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="5" />-->
-
-<!--            <Space-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1" />-->
-<!--        </LinearLayout>-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -229,12 +57,17 @@
 
     </LinearLayout>
 
-    <WebView
-        android:id="@+id/webview"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:windowSoftInputMode="adjustResize"
-        android:visibility="gone" />
+        android:layout_height="match_parent">
+        <WebView
+            android:id="@+id/webview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+    </ScrollView>
+
+
 
     <ImageView
         android:id="@+id/myImageView"
