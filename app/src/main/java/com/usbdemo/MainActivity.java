@@ -161,9 +161,6 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show();
         checkForUpdates();
 
-//        View decorView = getWindow().getDecorView();
-//        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
-
 
 
         getWindow().getDecorView().setSystemUiVisibility(
@@ -514,6 +511,15 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                             m_bWebViewOpened = true;
                             myImageView.setVisibility(View.GONE);
                             runOnUiThread(() -> {
+
+                                getWindow().getDecorView().setSystemUiVisibility(
+                                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                                                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                                | View.SYSTEM_UI_FLAG_FULLSCREEN);
+
                                 myWebView.setVisibility(View.VISIBLE);
                                 myImageView.setVisibility(View.GONE); // hide the cat picture
                                 myWebView.loadUrl(URL);
@@ -537,7 +543,15 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                         } else if (temp < 36.2 && m_bWebViewOpened) {
                             m_bWebViewOpened = false;
                             runOnUiThread(() -> {
-//                                myWebView.reload();
+
+                                getWindow().getDecorView().setSystemUiVisibility(
+                                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                                                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                                | View.SYSTEM_UI_FLAG_FULLSCREEN);
+
                                 myImageView.setVisibility(View.GONE); // show the cat picture
                             });
                         }
