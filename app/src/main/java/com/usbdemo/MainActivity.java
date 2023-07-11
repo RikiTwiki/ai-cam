@@ -528,6 +528,15 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                                 myWebView.setVisibility(View.VISIBLE);
                                 myImageView.setVisibility(View.GONE); // hide the cat picture
                                 myWebView.loadUrl(URL);
+
+                                getWindow().getDecorView().setSystemUiVisibility(
+                                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                                                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                                | View.SYSTEM_UI_FLAG_FULLSCREEN);
+
                                 myWebView.setWebViewClient(new WebViewClient() {
 
                                     @Override
