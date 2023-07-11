@@ -508,17 +508,18 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                     if (m_bPreview) { // Assuming m_bPreview indicates if preview is active
                         double temp = temp(m_dwCurUserID);
                         if (temp > 38.2 && !m_bWebViewOpened) {
+
+                            getWindow().getDecorView().setSystemUiVisibility(
+                                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                                            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                            | View.SYSTEM_UI_FLAG_FULLSCREEN);
+
                             m_bWebViewOpened = true;
                             myImageView.setVisibility(View.GONE);
                             runOnUiThread(() -> {
-
-                                getWindow().getDecorView().setSystemUiVisibility(
-                                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                                                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                                                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                                                | View.SYSTEM_UI_FLAG_FULLSCREEN);
 
                                 myWebView.setVisibility(View.VISIBLE);
                                 myImageView.setVisibility(View.GONE); // hide the cat picture
@@ -539,6 +540,15 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                                         );
                                     }
                                 });
+
+                                getWindow().getDecorView().setSystemUiVisibility(
+                                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                                                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                                | View.SYSTEM_UI_FLAG_FULLSCREEN);
+
                             });
                         } else if (temp < 36.2 && m_bWebViewOpened) {
                             m_bWebViewOpened = false;
