@@ -468,7 +468,8 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
             // Add a Runnable that calls the 'temp' method every second while preview is active
             final Handler handler = new Handler(Looper.getMainLooper());
-            WebView myWebView = (WebView) findViewById(R.id.webview);
+//            WebView myWebView = (WebView) findViewById(R.id.webview);
+            ScrollableWebView myWebView = (ScrollableWebView) findViewById(R.id.webview);
 //            myWebView.setWebViewClient(new WebViewClient() {
 //
 //                @Override
