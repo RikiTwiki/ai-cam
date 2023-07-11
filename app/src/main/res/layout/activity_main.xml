@@ -235,19 +235,6 @@
         android:layout_height="match_parent"
         android:visibility="gone" />
 
-<!--    <ScrollView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent">-->
-
-<!--        <com.usbdemo.ScrollableWebView-->
-<!--            android:id="@+id/webview"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:visibility="gone"/>-->
-
-<!--    </ScrollView>-->
-
-
     <ImageView
         android:id="@+id/myImageView"
         android:layout_width="match_parent"

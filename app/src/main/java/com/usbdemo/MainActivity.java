@@ -172,8 +172,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
     }
 
     //初始化界面控件
@@ -442,15 +441,6 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     //开始预览
     private boolean StartPreview() {
 
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-
         // Check for permissions
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -479,7 +469,6 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             // Add a Runnable that calls the 'temp' method every second while preview is active
             final Handler handler = new Handler(Looper.getMainLooper());
             WebView myWebView = (WebView) findViewById(R.id.webview);
-//            ScrollableWebView myWebView = (ScrollableWebView) findViewById(R.id.webview);
 //            myWebView.setWebViewClient(new WebViewClient() {
 //
 //                @Override
@@ -528,15 +517,6 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                                 myWebView.setVisibility(View.VISIBLE);
                                 myImageView.setVisibility(View.GONE); // hide the cat picture
                                 myWebView.loadUrl(URL);
-
-                                getWindow().getDecorView().setSystemUiVisibility(
-                                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                                                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                                                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                                                | View.SYSTEM_UI_FLAG_FULLSCREEN);
-
                                 myWebView.setWebViewClient(new WebViewClient() {
 
                                     @Override
