@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     private int m_dwCurUserID = JavaInterface.USB_INVALID_USER_ID; //当前登录的设备句柄
 
 
-    public final String URL = "https://adminagro.24mycrm.com/chat-bot/";
+    public final String URL = "https://frontrobot.sanarip.org/";
 
     private boolean m_bLogin = false; //是否登录设备
     private boolean m_bPreview = false; //是否开启预览
