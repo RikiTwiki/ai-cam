@@ -545,7 +545,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                                                 | View.SYSTEM_UI_FLAG_FULLSCREEN);
 
                             });
-                        } else if (temp < 36.2 && m_bWebViewOpened) {
+                        } else if (temp < 34.2 && m_bWebViewOpened) {
                             m_bWebViewOpened = false;
                             runOnUiThread(() -> {
 
