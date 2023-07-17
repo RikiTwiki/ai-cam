@@ -7,16 +7,21 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -56,6 +61,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback{
@@ -127,6 +133,12 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     private SurfaceHolder m_pHolder = null;
 
     private boolean m_bWebViewOpened = false;
+
+    // Add a Runnable that calls the 'temp' method every second while preview is active
+    final Handler handler = new Handler(Looper.getMainLooper());
+    WebView myWebView = (WebView) findViewById(R.id.webview);
+
+    private SpeechRecognizer speechRecognizer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -463,9 +475,8 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             Toast.makeText(this, "StartPreview Success! iUserID:" + m_dwCurUserID, Toast.LENGTH_SHORT).show();
 
 
-            // Add a Runnable that calls the 'temp' method every second while preview is active
-            final Handler handler = new Handler(Looper.getMainLooper());
-            WebView myWebView = (WebView) findViewById(R.id.webview);
+
+
 
 
             myWebView.getSettings().setJavaScriptEnabled(true);
@@ -545,6 +556,14 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                                                 | View.SYSTEM_UI_FLAG_FULLSCREEN);
 
                             });
+                            // Create an instance of AudioManager
+                            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
+                            // Check if the speaker is currently free
+                            if (!audioManager.isMusicActive()) {
+                                Log.e("[USBDemo]", "Speaker is not free");
+                                startListening();
+                            }
                         } else if (temp < 34.2 && m_bWebViewOpened) {
                             m_bWebViewOpened = false;
                             runOnUiThread(() -> {
@@ -1383,6 +1402,85 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         }).start();
     }
 
+
+    private void startListening() {
+        if (speechRecognizer == null) {
+            speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
+            speechRecognizer.setRecognitionListener(new RecognitionListener() {
+                @Override
+                public void onResults(Bundle results) {
+                    ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+                    if (matches != null) {
+                        for (String result : matches) {
+                            if (result.toLowerCase().contains("нурай") || result.toLowerCase().contains("нугай") || result.toLowerCase().contains("нухай") || result.toLowerCase().contains("нулай") || result.toLowerCase().contains("нуурай") || result.toLowerCase().contains("нур ай") || result.toLowerCase().contains("ну рай") || result.toLowerCase().contains("нураай") || result.toLowerCase().contains("нураи") || result.toLowerCase().contains("урай") || result.toLowerCase().contains("привет нурай") || result.toLowerCase().contains("хей нурай") || result.toLowerCase().contains("нуай") || result.toLowerCase().contains("нура") || result.toLowerCase().contains("нурайка")) {
+                                myWebView.setWebViewClient(new WebViewClient() {
+
+                                    @Override
+                                    public void onPageFinished(WebView view, String url) {
+                                        super.onPageFinished(view, url);
+
+                                        view.loadUrl(
+                                                "javascript:(function() { " +
+                                                        "var elements = document.getElementsByClassName('SpeechRecognation_speechRecognation__ZeBqn container');" +
+                                                        "for (var i = 0; i < elements.length; i++) {" +
+                                                        "elements[i].click();" +
+                                                        "}" +
+                                                        "})()"
+                                        );
+                                    }
+                                });
+                                break;
+                            }
+                        }
+                    }
+                    // Restart listening when current listening ends
+                    startListening();
+                }
+
+                @Override
+                public void onEndOfSpeech() {
+                    // Restart listening when current listening ends
+                    startListening();
+                }
+
+                // Other methods of RecognitionListener are left for brevity
+
+                @Override
+                public void onReadyForSpeech(Bundle params) {}
+                @Override
+                public void onBeginningOfSpeech() {}
+                @Override
+                public void onRmsChanged(float rmsdB) {}
+                @Override
+                public void onBufferReceived(byte[] buffer) {}
+                @Override
+                public void onError(int error) {
+                    // Start listening again if there's an error.
+                    startListening();
+                }
+                @Override
+                public void onPartialResults(Bundle partialResults) {}
+                @Override
+                public void onEvent(int eventType, Bundle params) {}
+            });
+        }
+
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ru-RU"); // Add this line
+        speechRecognizer.startListening(intent);
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (speechRecognizer != null) {
+            speechRecognizer.destroy();
+        }
+    }
 
 
 }
