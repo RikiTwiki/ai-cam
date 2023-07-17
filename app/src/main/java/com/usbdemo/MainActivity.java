@@ -557,13 +557,13 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
                             });
                             // Create an instance of AudioManager
-                            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+//                            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
                             // Check if the speaker is currently free
-                            if (!audioManager.isMusicActive()) {
-                                Log.e("[USBDemo]", "Speaker is not free");
-                                startListening();
-                            }
+//                            if (!audioManager.isMusicActive()) {
+//                                Log.e("[USBDemo]", "Speaker is not free");
+//                                startListening();
+//                            }
                         } else if (temp < 34.2 && m_bWebViewOpened) {
                             m_bWebViewOpened = false;
                             runOnUiThread(() -> {
